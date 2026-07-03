@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b3d1e">
+<title>8 Ball Pool 3D</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%B1%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ MENU PRINCIPALE ============ -->
+<div id="menu" class="screen">
+  <div class="menu-inner">
+    <h1 class="logo">🎱 8 BALL POOL <span>3D</span></h1>
+
+    <div class="wallet">
+      <span class="coin">🪙</span> <span id="menuCoins">0</span>
+      <button id="refillBtn" class="mini-btn" style="display:none">+ Ricarica gratis</button>
+    </div>
+
+    <h2 class="section-title">Scegli il tuo avversario</h2>
+    <div id="botList" class="bot-list"><!-- generato da JS --></div>
+
+    <h2 class="section-title">La tua stecca</h2>
+    <div id="cueColors" class="cue-colors"><!-- generato da JS --></div>
+
+    <div class="options-row">
+      <label class="toggle"><input type="checkbox" id="hintToggle" checked><span>💡 Consigli di mira</span></label>
+      <label class="toggle"><input type="checkbox" id="soundToggle" checked><span>🔊 Suoni</span></label>
+    </div>
+
+    <button id="playBtn" class="play-btn">GIOCA <span id="playBet"></span></button>
+    <p class="menu-footer">Regole ufficiali 8-ball • Fisica realistica • Ottimizzato per telefono</p>
+  </div>
+</div>
+
+<!-- ============ GIOCO ============ -->
+<div id="game" class="screen" style="display:none">
+  <canvas id="canvas3d"></canvas>
+
+  <!-- Barra superiore: giocatori, timer, puntata -->
+  <div id="topbar">
+    <div class="player-card" id="cardP1">
+      <div class="avatar-wrap">
+        <svg class="timer-ring" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="27"/><circle id="ringP1" class="ring-fg" cx="30" cy="30" r="27"/></svg>
+        <div class="avatar" id="avatarP1">🙂</div>
+      </div>
+      <div class="pinfo">
+        <div class="pname" id="nameP1">Tu</div>
+        <div class="pballs" id="ballsP1"></div>
+      </div>
+    </div>
+
+    <div id="centerInfo">
+      <div id="betInfo">🪙 <span id="betAmount">0</span></div>
+      <div id="turnLabel">—</div>
+      <div id="timerText"></div>
+    </div>
+
+    <div class="player-card right" id="cardP2">
+      <div class="pinfo right">
+        <div class="pname" id="nameP2">Bot</div>
+        <div class="pballs" id="ballsP2"></div>
+      </div>
+      <div class="avatar-wrap">
+        <svg class="timer-ring" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="27"/><circle id="ringP2" class="ring-fg" cx="30" cy="30" r="27"/></svg>
+        <div class="avatar" id="avatarP2">🤖</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messaggi (fallo, gruppo assegnato, ecc.) -->
+  <div id="toast"></div>
+  <div id="hintText"></div>
+
+  <!-- Slider potenza -->
+  <div id="powerWrap">
+    <div id="powerLabel">POTENZA</div>
+    <div id="powerTrack">
+      <div id="powerFill"></div>
+      <div id="powerKnob">🎱</div>
+    </div>
+    <div id="powerValue">0%</div>
+  </div>
+
+  <!-- Pulsanti laterali -->
+  <div id="sideBtns">
+    <button id="viewBtn" class="round-btn" title="Vista dall'alto">🔝</button>
+    <button id="soundBtn" class="round-btn">🔊</button>
+    <button id="menuBtn" class="round-btn">☰</button>
+  </div>
+
+  <div id="fpsBadge"></div>
+  <div id="ballInHandMsg" style="display:none">✋ Palla in mano: trascina la bianca dove vuoi</div>
+
+  <!-- Overlay fine partita -->
+  <div id="endOverlay" style="display:none">
+    <div class="end-box">
+      <div id="endEmoji">🏆</div>
+      <div id="endTitle">VITTORIA!</div>
+      <div id="endCoins"></div>
+      <div id="endReason"></div>
+      <button id="rematchBtn" class="play-btn">RIVINCITA</button>
+      <button id="backMenuBtn" class="mini-btn">Torna al menu</button>
+    </div>
+  </div>
+
+  <!-- Conferma abbandono -->
+  <div id="quitOverlay" style="display:none">
+    <div class="end-box">
+      <div id="endEmojiQ">🚪</div>
+      <div class="q-title">Abbandonare la partita?</div>
+      <div class="q-sub">Perderai la puntata di <span id="quitBet"></span> 🪙</div>
+      <button id="quitYes" class="play-btn danger">Abbandona</button>
+      <button id="quitNo" class="mini-btn">Continua a giocare</button>
+    </div>
+  </div>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
